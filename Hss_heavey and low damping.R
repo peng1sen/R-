@@ -1,4 +1,4 @@
-##
+##多圖組合
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
   
@@ -37,21 +37,27 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 ##
 library(ggplot2)
 library(grid)
-#
+#呼叫方法
+#（檔案位置,工作表。默認為1）
 HSS_straight_low <- read_excel("Downloads/HSS_straight.xlsx",sheet = 2)
 HSS_straight_heavey <- read_excel("Downloads/HSS_straight.xlsx",sheet = 1)
+
+set.seed(5)#隨機種子5號
+#sample(取樣位置, 個數, 數否重複取樣。默認為不重複取樣)
+HSS_straight_low.subset <- HSS_straight_low[sample(nrow(HSS_straight_low), 10000),]#對row取樣，儲存到subset裡面。
 #
-set.seed(5)
-HSS_straight_low.subset <- HSS_straight_low[sample(nrow(HSS_straight_low), 10000),] 
-set.seed(3)
+set.seed(3)#隨機種子3號
 HSS_straight_heavey.subset <- HSS_straight_heavey[sample(nrow(HSS_straight_heavey), 10000),] 
-chart_1 = qplot(Time, f, data = HSS_straight_low.subset,alpha = I(1/100))+
-  ggtitle("low damping")+
-  xlab('Time')+
-  ylab('Amp')
+#
+#繪圖
+chart_1 = qplot(Time, f, data = HSS_straight_low.subset,alpha = I(1/100))+ #alpha標點透明化
+  ggtitle("low damping")+ #題目
+  xlab('Time')+ #x標題
+  ylab('Amp') #y標題
 chart_2 = qplot(Time, f, data = HSS_straight_heavey.subset,alpha = I(1/100))+
   ggtitle("heavey damping")+
   xlab('Time')+
   ylab('Amp')
-multiplot(chart_1, chart_2)
-##
+  
+##組合圖面
+multiplot(chart_1, chart_2) 
